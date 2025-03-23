@@ -112,6 +112,7 @@
 
     h1 {
       font-size: clamp(2.5rem, 5vw, 3.8rem);
+      /* font-size: clamp(2.5rem, 5vw, 3.8rem); */
       margin-bottom: var(--spacing-unit);
       position: relative;
       display: inline-block;
@@ -457,7 +458,7 @@
     }
 
     header h1 {
-        font-size: clamp(5rem, 8vw, 6rem); /* Larger font */
+        font-size: clamp(4rem, 8vw, 6rem); /* Larger font */
         position: relative;
         /* cursor: pointer; */
         transition: transform 0.3s ease;
@@ -524,6 +525,12 @@
         background-color: #191919;
       }
     }
+
+    @media (max-width: 600px) {
+        header h1 {
+            font-size: clamp(2.5rem, 6vw, 3.8rem);
+        }
+    }
   </style>
 </head>
 <body>
@@ -540,7 +547,6 @@
     <br>
     <!-- <time datetime="2025-03-23">March 23, 2025</time> -->
      
-      
     </div>
     <button id="toggle-dark-mode" aria-label="Toggle dark mode">
       <i class="fas fa-moon"></i>
