@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Everythingism</title>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #111;
+      --background-color: #fff;
+      --accent-color: #555;
+      --highlight-color: #d0d0d0;
+      --text-color: #333;
+      --light-gray: #eee;
+      --medium-gray: #999;
+      --spacing-unit: clamp(1rem, 2vw, 2rem);
+      --reading-width: min(65ch, 100% - 2rem);
+      --heading-font: 'Georgia', serif;
+      --body-font: 'system-ui', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    /* Dark mode override via toggle */
+    body.dark-mode {
+      --primary-color: #eee;
+      --background-color: #121212;
+      --accent-color: #aaa;
+      --highlight-color: #222;
+      --text-color: #ddd;
+      --light-gray: #222;
+      --medium-gray: #666;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 18px;
+    }
+
+    body {
+      font-family: var(--body-font);
+      line-height: 1.6;
+      color: var(--text-color);
+      background-color: var(--background-color);
+      font-weight: 400;
+      padding: 0;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    header {
+      padding: calc(var(--spacing-unit) * 3) var(--spacing-unit) calc(var(--spacing-unit) * 2);
+      text-align: center;
+      border-bottom: 1px solid var(--light-gray);
+      margin-bottom: calc(var(--spacing-unit) * 2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Dark mode toggle button */
+    #toggle-dark-mode {
+      position: absolute;
+      top: var(--spacing-unit);
+      right: var(--spacing-unit);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 1.5rem;
+      color: var(--accent-color);
+      transition: color 0.3s;
+      z-index: 20;
+    }
+    #toggle-dark-mode:hover {
+      color: var(--primary-color);
+    }
+
+    header::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 50%, var(--highlight-color), transparent 70%);
+      opacity: 0.6;
+      z-index: -1;
+      transform: scale(1.2);
+      transition: all 0.8s ease-out;
+    }
+
+    header:hover::before {
+      transform: scale(1.4);
+      opacity: 0.8;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: var(--heading-font);
+      font-weight: normal;
+      line-height: 1.2;
+      color: var(--primary-color);
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 5vw, 3.8rem);
+      margin-bottom: var(--spacing-unit);
+      position: relative;
+      display: inline-block;
+    }
+
+    h1::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 1px;
+      background-color: var(--accent-color);
+      transition: width 0.3s ease;
+    }
+
+    header:hover h1::after {
+      width: 120px;
+    }
+
+    /* Meta info now displays as block and stacks vertically */
+    .meta {
+      text-align: center;
+      margin-bottom: calc(var(--spacing-unit) * 2);
+      font-size: 0.9rem;
+      color: var(--accent-color);
+      position: relative;
+      display: block;
+      line-height: 1.5;
+    }
+
+    h2 {
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      margin: calc(var(--spacing-unit) * 3) 0 var(--spacing-unit);
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    h2::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 1px;
+      background-color: var(--accent-color);
+      transition: width 0.3s ease;
+    }
+
+    h2:hover::after {
+      width: 100px;
+    }
+
+    h3 {
+      font-size: clamp(1.4rem, 2vw, 1.8rem);
+      margin: calc(var(--spacing-unit) * 2) 0 var(--spacing-unit);
+    }
+
+    .author-name {
+        font-size: clamp(1.6rem, 4vw, 2rem);
+        margin-top: var(--spacing-unit);
+        font-family: var(--heading-font);
+        color: var(--primary-color);
+    }
+
+    main {
+      max-width: var(--reading-width);
+      margin: 0 auto;
+      padding: 0 var(--spacing-unit);
+      flex: 1;
+    }
+
+    p {
+      margin-bottom: var(--spacing-unit);
+      font-size: clamp(1rem, 1.1vw, 1.2rem);
+      opacity: 0.95;
+      transition: opacity 0.3s ease;
+    }
+
+    p:hover {
+      opacity: 1;
+    }
+
+    p:first-of-type::first-letter {
+      font-size: 3.8em;
+      float: left;
+      line-height: 0.7;
+      padding-right: 10px;
+      color: var(--primary-color);
+      font-family: var(--heading-font);
+    }
+
+    .author-card {
+  max-width: var(--reading-width);
+  margin: 2rem auto;
+  padding: 1.5rem;
+  border: 1px solid var(--light-gray);
+  border-radius: 8px;
+  display: flex;
+  gap: 1.5rem;
+  background-color: var(--background-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease;
+}
+
+.author-card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.author-photo {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid var(--accent-color);
+}
+
+.author-details {
+  flex: 1;
+}
+
+.author-details h3 {
+  margin-bottom: 0.5rem;
+  font-size: clamp(1.5rem, 2vw, 2rem);
+  font-family: var(--heading-font);
+  color: var(--primary-color);
+}
+
+.author-details p {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: var(--text-color);
+}
+
+.author-details a {
+  text-decoration: none;
+  color: var(--accent-color);
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.author-details a:hover {
+  color: var(--primary-color);
+}
+
+
+    /* .highlight-text {
+      position: relative;
+      display: inline;
+      z-index: 1;
+    } */
+
+    /* .highlight-text::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 30%;
+      background-color: var(--highlight-color);
+      z-index: -1;
+      opacity: 0.4;
+      transition: height 0.3s ease, opacity 0.3s ease;
+    } */
+/* 
+    .highlight-text:hover::after {
+      height: 100%;
+      opacity: 0.2;
+    } */
+
+    blockquote {
+      font-style: italic;
+      margin: calc(var(--spacing-unit) * 2) 0;
+      padding: var(--spacing-unit) calc(var(--spacing-unit) * 1.5);
+      border-left: 3px solid var(--medium-gray);
+      color: var(--accent-color);
+      background-color: var(--light-gray);
+      opacity: 0.9;
+      transform: translateX(0);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    blockquote:hover {
+      opacity: 1;
+      transform: translateX(5px);
+    }
+
+    blockquote::before {
+      content: "“";
+      font-size: 4em;
+      position: absolute;
+      left: 10px;
+      top: -20px;
+      opacity: 0.1;
+      font-family: var(--heading-font);
+    }
+
+    figure {
+      margin: calc(var(--spacing-unit) * 2) -20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      border-radius: 4px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+
+    figure:hover {
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      transform: translateY(-3px);
+    }
+
+    figure img {
+      max-width: 100%;
+      height: auto;
+      transition: all 0.5s ease;
+      filter: grayscale(20%);
+    }
+
+    figure:hover img {
+      transform: scale(1.02);
+      filter: grayscale(0%);
+    }
+
+    figcaption {
+      padding: calc(var(--spacing-unit) / 2) var(--spacing-unit);
+      font-size: 0.9rem;
+      color: var(--accent-color);
+      font-style: italic;
+      background-color: var(--light-gray);
+    }
+
+    .author-link {
+        font-size: 1.2rem; /* Adjust size as desired */
+        color: var(--accent-color);
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .author-link:hover {
+        color: var(--primary-color);
+    }
+
+
+    .copy-link {
+        opacity: 0.5;
+        margin-left: 0.5rem;
+        font-size: 0.4em;
+        text-decoration: none;
+        transition: opacity 0.3s ease;
+        color: var(--dark-gray);
+    }
+
+    .copy-link:hover {
+        opacity: 1;
+    }
+
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: var(--spacing-unit);
+      margin: var(--spacing-unit) 0;
+    }
+
+    .social-links a {
+      color: var(--accent-color);
+      text-decoration: none;
+      transition: all 0.3s;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--light-gray);
+    }
+
+    .social-links a:hover {
+      color: var(--background-color);
+      background-color: var(--primary-color);
+      transform: translateY(-3px);
+    }
+
+    .reading-progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: transparent;
+      z-index: 10;
+    }
+
+    .reading-progress-bar {
+      height: 3px;
+      background: var(--primary-color);
+      width: 0%;
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: var(--primary-color);
+      color: var(--background-color);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      z-index: 100;
+    }
+
+    .back-to-top.visible {
+      opacity: 0.7;
+      visibility: visible;
+    }
+
+    .back-to-top:hover {
+      opacity: 1;
+      transform: translateY(-3px);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.8s;
+    }
+    
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    header h1 {
+        font-size: clamp(5rem, 8vw, 6rem); /* Larger font */
+        position: relative;
+        /* cursor: pointer; */
+        transition: transform 0.3s ease;
+    }
+
+    /* Pseudo-element for the gradient effect */
+    /* header h1::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        background: radial-gradient(
+            circle at var(--x, 50%) var(--y, 50%),
+            rgba(128, 128, 128, 0.2),
+            transparent 40%
+        );
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    } */
+
+    /* Show the gradient on hover */
+    /* header h1:hover::after {
+        opacity: 1;
+    } */
+
+
+    @media (max-width: 768px) {
+      html {
+        font-size: 16px;
+      }
+      
+      header {
+        padding: var(--spacing-unit);
+      }
+      
+      figure {
+        margin: calc(var(--spacing-unit) * 2) 0;
+      }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --primary-color: #eee;
+        --background-color: #121212;
+        --accent-color: #aaa;
+        --highlight-color: #222;
+        --text-color: #ddd;
+        --light-gray: #222;
+        --medium-gray: #666;
+      }
+      
+      blockquote {
+        background-color: #191919;
+      }
+      
+      figcaption {
+        background-color: #191919;
+      }
+      
+      .social-links a {
+        background-color: #191919;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="reading-progress-container">
+    <div class="reading-progress-bar" id="reading-progress-bar"></div>
+  </div>
+
+  <header>
+    <h1 class="animate__animated animate__fadeInDown">Everythingism</h1>
+    <div class="meta animate__animated animate__fadeIn animate__delay-1s">
+    <span>
+        <a href="https://x.com/jo3hill" target="_blank" class="author-link">Joe Hill</a> 
+    </span>
+    <br>
+    <!-- <time datetime="2025-03-23">March 23, 2025</time> -->
+     
+      
+    </div>
+    <button id="toggle-dark-mode" aria-label="Toggle dark mode">
+      <i class="fas fa-moon"></i>
+    </button>
+  </header>
+
+  <main>
+    <p class="reveal">In the vast landscape of philosophical thought, few concepts have captivated the human imagination quite like the notion of <span class="highlight-text">"everythingism"</span> — the radical proposition that all things are interconnected in ways that transcend our conventional understanding of reality. This essay explores the foundations, implications, and potential futures of this emerging worldview.</p>
+
+    <p class="reveal">The essence of everythingism lies not merely in acknowledging connections between disparate elements of existence, but in recognizing that these connections constitute a fundamental aspect of reality itself. Unlike traditional holistic approaches that seek merely to integrate separate parts into coherent wholes, everythingism suggests that the very distinction between parts and wholes is, at its core, illusory.</p>
+
+    <blockquote class="reveal">
+      "To understand everything would be to perceive all things simultaneously, as a single, unified entity — neither separating what cannot be truly divided, nor combining what cannot be truly united."
+    </blockquote>
+
+    <h2 id="historical-context" class="reveal">
+        The Historical Context
+        <a href="#historical-context" class="copy-link" title="Copy link to this section">
+            <i class="fas fa-link"></i>
+        </a>
+    </h2>
+
+    <p class="reveal">While the term "everythingism" may be contemporary, its intellectual lineage stretches back through centuries of human thought. From ancient Eastern concepts of non-duality to Western philosophical explorations of monism, the intuition that reality might be fundamentally unified has persistently emerged across cultures and epochs.</p>
+
+    <p class="reveal">Ancient wisdom traditions often approached this unity through direct experience rather than abstract reasoning. Meditation practices, contemplative arts, and various spiritual disciplines all sought to dissolve the barriers of perception that maintain our sense of separation from the whole.</p>
+
+    <figure class="reveal">
+      <img src="/api/placeholder/800/450" alt="Ancient contemplative art depicting interconnectedness">
+      <figcaption>Ancient artistic representations often depicted the interconnected nature of all phenomena</figcaption>
+    </figure>
+
+    <h2 id="contemporary-resurgence" class="reveal">
+        The Contemporary Resurgence
+        <a href="#contemporary-resurgence" class="copy-link" title="Copy link to this section">
+            <i class="fas fa-link"></i>
+        </a>
+    </h2>
+
+    <p class="reveal">Modern developments across numerous fields have breathed new life into these ancient intuitions. Quantum physics has revealed the strange entanglement of particles across vast distances. Ecological sciences have mapped the intricate web of relationships that sustain planetary life. Information theory has provided frameworks for understanding how patterns propagate across seemingly unrelated domains.</p>
+
+    <p class="reveal">These scientific advances have converged with technological developments that make interconnection not just a theoretical concept but a lived reality. The internet, social media, global transportation, and instantaneous communication have created a world where the butterfly effect is no longer merely metaphorical — the actions of individuals can and do ripple across the global system with unprecedented speed and impact.</p>
+
+    <h3 class="reveal">Implications for Knowledge</h3>
+
+    <p class="reveal">If everything is indeed connected to everything else, then our traditional approach to knowledge — dividing reality into discrete disciplines and domains — may be fundamentally limited. The boundaries between physics and biology, between economics and psychology, between art and mathematics begin to appear more as artifacts of our cognitive limitations than as reflections of reality's true structure.</p>
+
+    <p class="reveal">This doesn't mean that specialization has no value. Rather, it suggests that specialists must remain aware of the artificial nature of their boundaries, and develop methods for communicating across these boundaries. Transdisciplinary approaches, meta-frameworks, and comprehensive thinking styles become not just intellectually fashionable but practically necessary.</p>
+
+    <blockquote class="reveal">
+      "The true expert is not one who knows everything about something, but one who understands how their something relates to everything."
+    </blockquote>
+
+    <figure class="reveal">
+      <img src="/api/placeholder/800/500" alt="Network visualization showing interconnections between fields of knowledge">
+      <figcaption>Modern network visualizations reveal the dense interconnections between seemingly disparate fields of knowledge</figcaption>
+    </figure>
+
+    <h2 id="living-everythingism" class="reveal">
+        Living Everythingism
+        <a href="#living-everythingism" class="copy-link" title="Copy link to this section">
+            <i class="fas fa-link"></i>
+        </a>
+    </h2>
+    <!-- <h2 class="reveal">Living Everythingism</h2> -->
+
+    <p class="reveal">Beyond its theoretical implications, everythingism offers a practical philosophy for navigating an increasingly complex world. It encourages us to be mindful of the extended consequences of our actions, to seek out unexpected connections between problems and solutions, and to maintain intellectual humility in the face of systems whose full complexity exceeds our comprehension.</p>
+
+    <p class="reveal">This philosophy manifests in practical approaches like systems thinking, in cultural movements emphasizing global consciousness, and in technological innovations designed to make connections visible and tangible. It informs emergent forms of governance that acknowledge our interdependence, economic models that account for externalities, and educational approaches that emphasize contextual understanding alongside specialized knowledge.</p>
+
+    <h3 class="reveal">Challenges and Criticisms</h3>
+
+    <p class="reveal">Of course, everythingism is not without its critics. Some argue that it threatens to dissolve important distinctions, leading to a kind of intellectual and moral relativism. Others worry that the emphasis on interconnection can paralyze action by making every decision seem overwhelmingly complex. Still others suggest that everythingism is simply too vague a concept to provide practical guidance in specific situations.</p>
+
+    <p class="reveal">These criticisms merit serious consideration. An everythingist perspective need not deny the utility of boundaries and categories in particular contexts, nor should it prevent decisive action when required. The key lies in maintaining awareness of these boundaries as tools rather than truths — useful for certain purposes, but always provisional and partial.</p>
+
+    <h2 id="conclusion" class="reveal">
+        Conclusion: Toward an Everything Future
+        <a href="#conclusion" class="copy-link" title="Copy link to this section">
+            <i class="fas fa-link"></i>
+        </a>
+    </h2>
+    <!-- <h2 class="reveal">Conclusion: Toward an Everything Future</h2> -->
+
+    <p class="reveal">As we move deeper into the 21st century, the relevance of everythingism seems likely to grow rather than diminish. The challenges we face — from climate change to artificial intelligence, from pandemic response to economic inequality — all resist siloed approaches and demand integrated understanding.</p>
+
+    <p class="reveal">Perhaps the ultimate promise of everythingism lies not in providing final answers, but in fostering a particular quality of attention — one that remains open to the vast web of relationships that constitute our world, that seeks connections across traditional boundaries, and that approaches complexity not as an obstacle to understanding but as the very substance of the reality we seek to understand.</p>
+
+    <p class="reveal">In embracing everythingism, we may discover that the truth of existence lies not in any particular thing, but in the infinite ways that all things relate to one another — a dynamic, ever-evolving tapestry that we both observe and help to weave.</p>
+
+    <div class="author-card">
+        <img src="https://via.placeholder.com/100" alt="Photo of Joe Hill" class="author-photo">
+        <div class="author-details">
+          <!-- <h3>Joe Hill</h3> -->
+          <span>Joe Hill is Policy Director at Reform Think Tank.</span><br>
+          <!-- <a href="#" aria-label="Share on Twitter"><i class="fab fa-twitter"></i></a> -->
+          <a href="#" aria-label="Share on Twitter"><i>&#120143;</i></a>
+          <a href="#" aria-label="Copy link"><i class="fas fa-link"></i></a>
+          <!-- <a href="https://authors-website.com" target="_blank">Visit Author Website</a> -->
+        </div>
+    </div>
+  </main>
+
+  <footer>
+    <!-- <p>© 2025 · Everythingism</p> -->
+  </footer>
+
+  <a href="#" class="back-to-top" id="back-to-top" aria-label="Back to top">
+    <i class="fas fa-arrow-up"></i>
+  </a>
+
+  <script>
+    // Reading progress bar
+    window.addEventListener('scroll', function() {
+      const totalHeight = document.body.scrollHeight - window.innerHeight;
+      const progress = (window.scrollY / totalHeight) * 100;
+      document.getElementById('reading-progress-bar').style.width = progress + '%';
+      
+      // Back to top button visibility
+      const backToTop = document.getElementById('back-to-top');
+      if (window.scrollY > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+
+    // Back to top functionality
+    document.getElementById('back-to-top').addEventListener('click', function(e) {
+      e.preventDefault();
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // Reveal animations on scroll
+    function revealOnScroll() {
+      const reveals = document.querySelectorAll('.reveal');
+      const windowHeight = window.innerHeight;
+      
+      reveals.forEach(reveal => {
+        const revealTop = reveal.getBoundingClientRect().top;
+        const revealPoint = 150;
+        
+        if (revealTop < windowHeight - revealPoint) {
+          reveal.classList.add('active');
+        }
+      });
+    }
+    
+    window.addEventListener('scroll', revealOnScroll);
+    window.addEventListener('DOMContentLoaded', revealOnScroll);
+
+    // Interactive text highlighting
+    // document.addEventListener('DOMContentLoaded', function() {
+    //   const paragraphs = document.querySelectorAll('p');
+      
+    //   paragraphs.forEach(paragraph => {
+    //     const words = paragraph.innerHTML.split(' ');
+    //     const importantWords = ['everythingism', 'interconnected', 'reality', 'unified', 'complexity', 'consciousness', 'systems', 'holistic', 'integration', 'quantum', 'transdisciplinary'];
+        
+    //     for (let i = 0; i < words.length; i++) {
+    //       const cleanWord = words[i].toLowerCase().replace(/[^\w]/g, '');
+          
+    //       if (importantWords.includes(cleanWord) && !words[i].includes('highlight-text')) {
+    //         words[i] = words[i].replace(new RegExp(`(${cleanWord})`, 'i'), "<span class='highlight-text'>$1</span>");
+    //       }
+    //     }
+        
+    //     paragraph.innerHTML = words.join(' ');
+    //   });
+    // });
+
+    // Dark mode toggle functionality
+    document.getElementById('toggle-dark-mode').addEventListener('click', function() {
+      document.body.classList.toggle('dark-mode');
+    });
+
+    document.querySelectorAll('.copy-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const url = window.location.origin + window.location.pathname + this.getAttribute('href');
+            navigator.clipboard.writeText(url).then(() => {
+            const icon = this.querySelector('i');
+            // Swap the link icon for a check mark
+            icon.classList.remove('fa-link');
+            icon.classList.add('fa-check');
+            
+            // After 2 seconds, revert back to the link icon
+            setTimeout(() => {
+                icon.classList.remove('fa-check');
+                icon.classList.add('fa-link');
+            }, 2000);
+            });
+        });
+    });
+
+
+    // document.querySelector('header h1').addEventListener('mousemove', function(e) {
+    //     const rect = this.getBoundingClientRect();
+    //     const x = e.clientX - rect.left; // X position within the element
+    //     const y = e.clientY - rect.top;  // Y position within the element
+    //     this.style.setProperty('--x', x + 'px');
+    //     this.style.setProperty('--y', y + 'px');
+    // });
+  </script>
+</body>
+</html>
